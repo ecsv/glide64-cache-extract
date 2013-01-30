@@ -4,7 +4,7 @@ glide64_cache_extract
 1. DESCRIPTION
 --------------
 
-glide64_cache_extract is debugging tool used to extract the content of a
+glide64_cache_extract is a debugging tool used to extract the content of a
 Glide64 texture cache and to show extra information about the content.
 
 2. USAGE
@@ -18,7 +18,8 @@ Extra information about the content and errors are printed on stdout.
 
 $ zcat MUPEN64PLUS.dat | glide64_cache_extract -vv --bitmapv5 \
   --prefix MUPEN64PLUS | tar x
-$ for i in *.bmp; do convert "${i}" "${i%.bmp}.png"; done
+$ for i in *.bmp; do convert -strip -define png:format=png32 \
+  -define png:compression-level=9  "${i}" "${i%.bmp}.png"; done
 $ rm *.bmp
 
 The output files don't follow the Rice hires texture naming scheme correctly.
