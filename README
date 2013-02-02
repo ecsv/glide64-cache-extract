@@ -44,3 +44,11 @@ $ ./scripts/checkpatch.pl --strict --ignore LONG_LINE,NEW_TYPEDEFS,CAMELCASE \
   -q $PATCH
 $ make CC=cgcc
 $ cppcheck --enable=all .
+
+5. EXTRA SCRIPTS
+----------------
+
+contrib/ contains extra scripts which can be used for further analysis.
+
+1. analyze_tex can be used to extract extra information from existing
+   hires texture packs which are not stored inside the glide64 texture cache.
