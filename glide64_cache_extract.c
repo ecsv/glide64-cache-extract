@@ -76,7 +76,7 @@ static void usage(int argc, char *argv[])
 	printf("\t -p,--prefix NAME                  Add prefix to each file\n");
 	printf("\t -t,--type [hires|tex]             Type of the input\n");
 	printf("\t -v,--verbose                      Print extra information on stderr (repeat for more verbosity)\n");
-	printf("\t -i,--ignore-error                 Skip current file when an conversion error is detected\n");
+	printf("\t -e,--ignore-error                 Skip current file when an conversion error is detected\n");
 	printf("\t -b,--bitmapv5                     Use V5 Windows Bitmap files with ImageMagick compatible alpha channels\n");
 	printf("\t -h,--help                         Show this message and exit\n");
 }
@@ -94,12 +94,12 @@ static int init(int argc, char *argv[])
 		{"prefix",		required_argument,	NULL, 'p'},
 		{"type",		required_argument,	NULL, 'p'},
 		{"help",		no_argument,		NULL, 'h'},
-		{"ignore-error",	no_argument,		NULL, 'i'},
+		{"ignore-error",	no_argument,		NULL, 'e'},
 		{"bitmapv5",		no_argument,		NULL, 'b'},
 		{NULL,			0,			NULL,  0 },
 	};
 
-	while ((o = getopt_long(argc, argv, "vp:t:ibh", long_options, &options_index)) != -1) {
+	while ((o = getopt_long(argc, argv, "vp:t:ebh", long_options, &options_index)) != -1) {
 		switch (o) {
 		case 'v':
 			globals.verbose++;
@@ -125,7 +125,7 @@ static int init(int argc, char *argv[])
 				return -EINVAL;
 			}
 			break;
-		case 'i':
+		case 'e':
 			globals.ignore_error = 1;
 			break;
 		case 'b':
