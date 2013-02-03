@@ -43,7 +43,7 @@ static int convert_input(void)
 		return ret;
 	}
 
-	while (!feof(stdin)) {
+	while (!feof(globals.in)) {
 		ret = convert_file();
 		if (ret < 0)
 			return ret;
@@ -73,6 +73,8 @@ static void usage(int argc, char *argv[])
 
 	printf("Usage: %s [options]\n\n", cmd);
 	printf("options:\n");
+	printf("\t -i,--input FILE                   Use FILE as uncompressed input file (default: stdin)\n");
+	printf("\t -o,--output FILE                  Use FILE as output file (default: stdout)\n");
 	printf("\t -p,--prefix NAME                  Add prefix to each file\n");
 	printf("\t -t,--type [hires|tex]             Type of the input\n");
 	printf("\t -v,--verbose                      Print extra information on stderr (repeat for more verbosity)\n");
@@ -89,6 +91,9 @@ static int init(int argc, char *argv[])
 	memset(&globals, 0, sizeof(globals));
 	memset(tarblock, 0, sizeof(tarblock));
 
+	globals.in = stdin;
+	globals.out = stdout;
+
 	struct option long_options[] = {
 		{"verbose",		no_argument,		NULL, 'v'},
 		{"prefix",		required_argument,	NULL, 'p'},
@@ -96,10 +101,12 @@ static int init(int argc, char *argv[])
 		{"help",		no_argument,		NULL, 'h'},
 		{"ignore-error",	no_argument,		NULL, 'e'},
 		{"bitmapv5",		no_argument,		NULL, 'b'},
+		{"input",		required_argument,	NULL, 'i'},
+		{"output",		required_argument,	NULL, 'o'},
 		{NULL,			0,			NULL,  0 },
 	};
 
-	while ((o = getopt_long(argc, argv, "vp:t:ebh", long_options, &options_index)) != -1) {
+	while ((o = getopt_long(argc, argv, "vp:t:ebhi:o:", long_options, &options_index)) != -1) {
 		switch (o) {
 		case 'v':
 			globals.verbose++;
@@ -130,6 +137,26 @@ static int init(int argc, char *argv[])
 			break;
 		case 'b':
 			globals.bitmapv5 = 1;
+			break;
+		case 'i':
+			if (globals.in != stdin)
+				fclose(globals.in);
+
+			globals.in = fopen(optarg, "rb");
+			if (!globals.in) {
+				fprintf(stderr, "Could not open input file %s\n", optarg);
+				return -ENOENT;
+			}
+			break;
+		case 'o':
+			if (globals.out != stdout)
+				fclose(globals.in);
+
+			globals.out = fopen(optarg, "wb");
+			if (!globals.out) {
+				fprintf(stderr, "Could not open output file %s\n", optarg);
+				return -ENOENT;
+			}
 			break;
 		default:
 			usage(argc, argv);

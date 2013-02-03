@@ -14,6 +14,9 @@ The uncompressed texture cache has to be given to glide64_cache_extract using
 stdin. The compressed files are usually named *_HIRESTEXTURES.dat and
 *_MEMORYCACHE.dat. The result is a v7 tarball written to stdout.
 
+The input and output files can also be specified using --input and --output. The
+input will not be extracted (can be done using gunzip).
+
 Extra information about the content and errors are printed on stdout.
 
 $ zcat MUPEN64PLUS.dat | glide64_cache_extract -vv --bitmapv5 \

@@ -23,15 +23,15 @@ static int get_buffer(void *buffer, size_t size, int print_error)
 {
 	size_t ret;
 
-	ret = fread(buffer, 1, size, stdin);
+	ret = fread(buffer, 1, size, globals.in);
 
 	if (ret == size)
 		return 0;
 
-	if (ferror(stdin) && print_error)
-		fprintf(stderr, "Error while reading from stdin\n");
+	if (ferror(globals.in) && print_error)
+		fprintf(stderr, "Error while reading input\n");
 
-	if (feof(stdin) && print_error)
+	if (feof(globals.in) && print_error)
 		fprintf(stderr, "File stream ended to early\n");
 
 	return -EIO;

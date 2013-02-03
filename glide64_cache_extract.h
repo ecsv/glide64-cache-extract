@@ -23,6 +23,7 @@
 #ifndef _GLIDE64_CACHE_EXTRACT_H_
 #define _GLIDE64_CACHE_EXTRACT_H_
 
+#include <stdio.h>
 #include <stdint.h>
 #include <stdlib.h>
 #include <string.h>
@@ -128,6 +129,8 @@ struct _globals {
 	int ignore_error;
 	int bitmapv5;
 	char *prefix;
+	FILE *in;
+	FILE *out;
 };
 extern struct _globals globals;
 

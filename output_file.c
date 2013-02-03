@@ -25,7 +25,7 @@ int write_tarblock(void *buffer, size_t size, size_t offset)
 {
 	size_t ret, padding_size;
 
-	ret = fwrite(buffer, 1, size, stdout);
+	ret = fwrite(buffer, 1, size, globals.out);
 	if (ret != size) {
 		fprintf(stderr, "Could not write file content\n");
 		return -EIO;
@@ -35,7 +35,7 @@ int write_tarblock(void *buffer, size_t size, size_t offset)
 	if (padding_size) {
 		padding_size = sizeof(tarblock) - padding_size;
 
-		ret = fwrite(tarblock, 1, padding_size, stdout);
+		ret = fwrite(tarblock, 1, padding_size, globals.out);
 		if (ret != padding_size) {
 			fprintf(stderr, "Could not write padding\n");
 			return -EIO;
