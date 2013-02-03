@@ -29,7 +29,7 @@ CFLAGS += $(shell $(PKG_CONFIG) --cflags zlib)
 LDLIBS +=  $(shell $(PKG_CONFIG) --libs zlib)
 
 
-CC ?= $(CROSS_COMPILE)gcc
+CC = $(CROSS_COMPILE)gcc
 RM ?= rm -f
 INSTALL ?= install
 MKDIR ?= mkdir -p

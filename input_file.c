@@ -60,7 +60,7 @@ int get_buffer_endian(void *buffer, size_t size, int print_error)
 		*(uint64_t *)buffer = le64toh(*(uint64_t *)buffer);
 		break;
 	default:
-		fprintf(stderr, "Invalid item size %zu for endianness conversion\n", size);
+		fprintf(stderr, "Invalid item size %u for endianness conversion\n", (unsigned int)size);
 		return -EINVAL;
 	}
 

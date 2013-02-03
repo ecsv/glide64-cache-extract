@@ -27,6 +27,7 @@ int parse_config(uint32_t config)
 	uint32_t testbits;
 
 	switch (globals.type) {
+	default:
 	case INPUT_UNKNOWN:
 		testbits = highres_bits | tex_bits;
 		break;

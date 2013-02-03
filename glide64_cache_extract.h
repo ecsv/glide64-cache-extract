@@ -1,6 +1,3 @@
-#define _BSD_SOURCE
-#include <endian.h>
-#include <stdio.h>
 /**
  * glide64_cache_extract, Glide64 TexCache Extraction tool for debugging
  *
@@ -22,6 +19,109 @@
 
 #ifndef _GLIDE64_CACHE_EXTRACT_H_
 #define _GLIDE64_CACHE_EXTRACT_H_
+
+#if defined(__linux__)
+
+#define _BSD_SOURCE
+#include <endian.h>
+
+#elif defined(__WIN32__)
+
+#if defined(__BYTE_ORDER__) && __BYTE_ORDER__ == __ORDER_LITTLE_ENDIAN__
+
+#define htole16
+#define le16toh
+#define htole32
+#define le32toh
+#define le64toh
+
+#else /* __ORDER_LITTLE_ENDIAN__ */
+
+#include <stdint.h>
+#include <stdlib.h>
+
+static inline uint16_t htole16(uint16_t host_16bits)
+{
+	static const uint16_t order = 0x0001ULL;
+	static const uint8_t *pos = (uint8_t *)&order;
+	uint8_t *in = (uint8_t *)&host_16bits;
+	uint16_t output;
+	uint8_t *out = (uint8_t *)&output;
+	size_t i;
+
+	for (i = 0; i < sizeof(output); i++)
+		out[sizeof(output) - 1 - i] = in[pos[i]];
+
+	return output;
+}
+
+static inline uint16_t le16toh(uint16_t little_endian_16bits)
+{
+	static const uint16_t order = 0x0001ULL;
+	static const uint8_t *pos = (uint8_t *)&order;
+	uint8_t *in = (uint8_t *)&little_endian_16bits;
+	uint16_t output;
+	uint8_t *out = (uint8_t *)&output;
+	size_t i;
+
+	for (i = 0; i < sizeof(output); i++)
+		out[pos[i]] = in[sizeof(output) - 1 - i];
+
+	return output;
+}
+
+static inline uint32_t htole32(uint32_t host_32bits)
+{
+	static const uint32_t order = 0x00010203ULL;
+	static const uint8_t *pos = (uint8_t *)&order;
+	uint8_t *in = (uint8_t *)&host_32bits;
+	uint32_t output;
+	uint8_t *out = (uint8_t *)&output;
+	size_t i;
+
+	for (i = 0; i < sizeof(output); i++)
+		out[sizeof(output) - 1 - i] = in[pos[i]];
+
+	return output;
+}
+
+static inline uint32_t le32toh(uint32_t little_endian_32bits)
+{
+	static const uint32_t order = 0x00010203ULL;
+	static const uint8_t *pos = (uint8_t *)&order;
+	uint8_t *in = (uint8_t *)&little_endian_32bits;
+	uint32_t output;
+	uint8_t *out = (uint8_t *)&output;
+	size_t i;
+
+	for (i = 0; i < sizeof(output); i++)
+		out[pos[i]] = in[sizeof(output) - 1 - i];
+
+	return output;
+}
+
+static inline uint64_t le64toh(uint64_t little_endian_64bits)
+{
+	static const uint64_t order = 0x0001020304050607ULL;
+	static const uint8_t *pos = (uint8_t *)&order;
+	uint8_t *in = (uint8_t *)&little_endian_64bits;
+	uint64_t output;
+	uint8_t *out = (uint8_t *)&output;
+	size_t i;
+
+	for (i = 0; i < sizeof(output); i++)
+		out[pos[i]] = in[sizeof(output) - 1 - i];
+
+	return output;
+}
+
+#endif /* __ORDER_LITTLE_ENDIAN__ */
+
+#else
+
+#include <sys/endian.h>
+
+#endif
 
 #include <stdio.h>
 #include <stdint.h>
