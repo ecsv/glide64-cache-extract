@@ -309,7 +309,7 @@ static int resize_image_bmp(struct glide64_file *file)
 {
 	struct bmp_header *header;
 	struct bmp_header_v5 *header_v5;
-	size_t header_size;
+	uint32_t header_size;
 	uint8_t *buf;
 	uint8_t *imagedata;
 	size_t line_size = file->width * 4;
@@ -321,9 +321,14 @@ static int resize_image_bmp(struct glide64_file *file)
 	}
 
 	if (globals.bitmapv5)
-		header_size = sizeof(*header_v5);
+		header_size = (uint32_t)sizeof(*header_v5);
 	else
-		header_size = sizeof(*header);
+		header_size = (uint32_t)sizeof(*header);
+
+	if (file->size > (UINT32_MAX - header_size)) {
+		fprintf(stderr, "Too large texture for bmp export\n");
+		return -EPERM;
+	}
 
 	buf = malloc(file->size + header_size);
 	if (!buf) {
@@ -412,6 +417,9 @@ static int normalize_image_a8(struct glide64_file *file)
 
 	pixels = file->width * file->height;
 	newsize = pixels * 4;
+	if (newsize > UINT32_MAX)
+		return -EINVAL;
+
 	buf = malloc(newsize);
 	if (!buf) {
 		fprintf(stderr, "Memory for A8 image content couldn't be allocated\n");
@@ -428,7 +436,7 @@ static int normalize_image_a8(struct glide64_file *file)
 
 	free(file->data);
 	file->data = (uint8_t *)buf;
-	file->size = newsize;
+	file->size = (uint32_t)newsize;
 	file->format = GR_TEXFMT_ARGB_8888;
 
 	return 0;
@@ -444,6 +452,9 @@ static int normalize_image_i8(struct glide64_file *file)
 
 	pixels = file->width * file->height;
 	newsize = pixels * 4;
+	if (newsize > UINT32_MAX)
+		return -EINVAL;
+
 	buf = malloc(newsize);
 	if (!buf) {
 		fprintf(stderr, "Memory for I8 image content couldn't be allocated\n");
@@ -460,7 +471,7 @@ static int normalize_image_i8(struct glide64_file *file)
 
 	free(file->data);
 	file->data = (uint8_t *)buf;
-	file->size = newsize;
+	file->size = (uint32_t)newsize;
 	file->format = GR_TEXFMT_ARGB_8888;
 
 	return 0;
@@ -476,6 +487,9 @@ static int normalize_image_a4i4(struct glide64_file *file)
 
 	pixels = file->width * file->height;
 	newsize = pixels * 4;
+	if (newsize > UINT32_MAX)
+		return -EINVAL;
+
 	buf = malloc(newsize);
 	if (!buf) {
 		fprintf(stderr, "Memory for A4I4 image content couldn't be allocated\n");
@@ -495,7 +509,7 @@ static int normalize_image_a4i4(struct glide64_file *file)
 
 	free(file->data);
 	file->data = (uint8_t *)buf;
-	file->size = newsize;
+	file->size = (uint32_t)newsize;
 	file->format = GR_TEXFMT_ARGB_8888;
 
 	return 0;
@@ -517,6 +531,9 @@ static int normalize_image_r5g6b5(struct glide64_file *file)
 
 	pixels = file->width * file->height;
 	newsize = pixels * 4;
+	if (newsize > UINT32_MAX)
+		return -EINVAL;
+
 	buf = malloc(newsize);
 	if (!buf) {
 		fprintf(stderr, "Memory for R5G6B5 image content couldn't be allocated\n");
@@ -538,7 +555,7 @@ static int normalize_image_r5g6b5(struct glide64_file *file)
 
 	free(file->data);
 	file->data = (uint8_t *)buf;
-	file->size = newsize;
+	file->size = (uint32_t)newsize;
 	file->format = GR_TEXFMT_ARGB_8888;
 
 	return 0;
@@ -554,6 +571,9 @@ static int normalize_image_a1r5g5b5(struct glide64_file *file)
 
 	pixels = file->width * file->height;
 	newsize = pixels * 4;
+	if (newsize > UINT32_MAX)
+		return -EINVAL;
+
 	buf = malloc(newsize);
 	if (!buf) {
 		fprintf(stderr, "Memory for A1R5G5B5 image content couldn't be allocated\n");
@@ -577,7 +597,7 @@ static int normalize_image_a1r5g5b5(struct glide64_file *file)
 
 	free(file->data);
 	file->data = (uint8_t *)buf;
-	file->size = newsize;
+	file->size = (uint32_t)newsize;
 	file->format = GR_TEXFMT_ARGB_8888;
 
 	return 0;
@@ -593,6 +613,9 @@ static int normalize_image_a4r4g4b4(struct glide64_file *file)
 
 	pixels = file->width * file->height;
 	newsize = pixels * 4;
+	if (newsize > UINT32_MAX)
+		return -EINVAL;
+
 	buf = malloc(newsize);
 	if (!buf) {
 		fprintf(stderr, "Memory for A4R4G4B4 image content couldn't be allocated\n");
@@ -616,7 +639,7 @@ static int normalize_image_a4r4g4b4(struct glide64_file *file)
 
 	free(file->data);
 	file->data = (uint8_t *)buf;
-	file->size = newsize;
+	file->size = (uint32_t)newsize;
 	file->format = GR_TEXFMT_ARGB_8888;
 
 	return 0;
@@ -632,6 +655,9 @@ static int normalize_image_a8i8(struct glide64_file *file)
 
 	pixels = file->width * file->height;
 	newsize = pixels * 4;
+	if (newsize > UINT32_MAX)
+		return -EINVAL;
+
 	buf = malloc(newsize);
 	if (!buf) {
 		fprintf(stderr, "Memory for A4R4G4B4 image content couldn't be allocated\n");
@@ -649,7 +675,7 @@ static int normalize_image_a8i8(struct glide64_file *file)
 
 	free(file->data);
 	file->data = (uint8_t *)buf;
-	file->size = newsize;
+	file->size = (uint32_t)newsize;
 	file->format = GR_TEXFMT_ARGB_8888;
 
 	return 0;
@@ -749,6 +775,9 @@ int prepare_file(struct glide64_file *file)
 	int ret;
 
 	expected_size = image_content_length(file);
+	if (expected_size > UINT32_MAX)
+		return -EINVAL;
+
 	if (file->format & GR_TEXFMT_GZ) {
 		destLen = expected_size + 4096;
 		buf = malloc(destLen);
@@ -773,7 +802,7 @@ int prepare_file(struct glide64_file *file)
 		file->format &= ~GR_TEXFMT_GZ;
 		free(file->data);
 		file->data = buf;
-		file->size = expected_size;
+		file->size = (uint32_t)expected_size;
 	} else {
 		if (expected_size != file->size) {
 			fprintf(stderr, "Expected size of file is not the actual file size\n");
