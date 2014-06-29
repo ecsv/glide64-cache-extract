@@ -194,20 +194,19 @@ static inline uint64_t le64toh(uint64_t little_endian_64bits)
 #define GR_TEXFMT_GZ                 0x8000U
 
 struct glide64_file {
+	uint8_t *data;
 	uint64_t checksum;
 	uint32_t width;
 	uint32_t height;
-	uint16_t format;
 	uint32_t smallLodLog2;
 	uint32_t largeLodLog2;
 	uint32_t aspectRatioLog2;
 	uint32_t tiles;
 	uint32_t untiled_width;
 	uint32_t untiled_height;
-	uint8_t is_hires_tex;
 	uint32_t size;
-
-	uint8_t *data;
+	uint16_t format;
+	uint8_t is_hires_tex;
 };
 
 enum verbosity_level {
