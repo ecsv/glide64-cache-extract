@@ -18,6 +18,12 @@
  */
 
 #include "glide64_cache_extract.h"
+#include <errno.h>
+#include <inttypes.h>
+#include <stddef.h>
+#include <stdint.h>
+#include <stdio.h>
+#include <stdlib.h>
 
 static int get_buffer(void *buffer, size_t size, int print_error)
 {

@@ -37,8 +37,8 @@
 
 #else /* __ORDER_LITTLE_ENDIAN__ */
 
+#include <stddef.h>
 #include <stdint.h>
-#include <stdlib.h>
 
 static inline uint16_t htole16(uint16_t host_16bits)
 {
@@ -123,15 +123,9 @@ static inline uint64_t le64toh(uint64_t little_endian_64bits)
 
 #endif
 
-#include <stdio.h>
+#include <stddef.h>
 #include <stdint.h>
-#include <stdlib.h>
-#include <string.h>
-#include <unistd.h>
-#include <getopt.h>
-#include <errno.h>
-#include <inttypes.h>
-#include <zlib.h>
+#include <stdio.h> 
 
 #define COMPRESSION_MASK    0x0000f000U
 #define NO_COMPRESSION      0x00000000U

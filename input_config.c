@@ -18,6 +18,9 @@
  */
 
 #include "glide64_cache_extract.h"
+#include <inttypes.h>
+#include <stdint.h>
+#include <stdio.h>
 
 int parse_config(uint32_t config)
 {

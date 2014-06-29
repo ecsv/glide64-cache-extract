@@ -18,6 +18,14 @@
  */
 
 #include "glide64_cache_extract.h"
+#include <errno.h>
+#include <inttypes.h>
+#include <stddef.h>
+#include <stdint.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <zlib.h>
 
 #define DDSD_CAPS		0x00000001U
 #define DDSD_HEIGHT		0x00000002U

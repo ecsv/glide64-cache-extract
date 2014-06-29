@@ -23,6 +23,10 @@
  */
 
 #include "glide64_cache_extract.h"
+#include <errno.h>
+#include <getopt.h>
+#include <stdlib.h>
+#include <string.h>
 
 struct _globals globals;
 
