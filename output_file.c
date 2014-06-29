@@ -61,7 +61,6 @@ static const char *image_extension(const struct glide64_file *file)
 	case GR_TEXFMT_ARGB_CMP_FXT1:
 		fprintf(stderr, "Unsupported format GR_TEXFMT_ARGB_CMP_FXT1\n");
 		return "";
-		break;
 	case GR_TEXFMT_ARGB_CMP_DXT1:
 	case GR_TEXFMT_ARGB_CMP_DXT3:
 	case GR_TEXFMT_ARGB_CMP_DXT5:
@@ -69,7 +68,6 @@ static const char *image_extension(const struct glide64_file *file)
 	default:
 		fprintf(stderr, "Unsupported format %x\n", file->format);
 		return "";
-		break;
 	}
 }
 
