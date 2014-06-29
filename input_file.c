@@ -166,6 +166,7 @@ int convert_file(void)
 	}
 	ret = get_buffer(file.data, file.size, 1);
 	if (ret < 0) {
+		free(file.data);
 		fprintf(stderr, "Failed to read file content\n");
 		return ret;
 	}
