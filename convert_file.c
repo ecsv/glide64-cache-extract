@@ -532,7 +532,7 @@ static int normalize_image_r5g6b5(struct glide64_file *file)
 		g |= g >> 6;
 		b = (raw & 0x001f) << 3;
 		b |= b >> 5;
-		p = (0xff << 24) | (r << 16) | (g << 8) | b;
+		p = (0xffu << 24) | (r << 16) | (g << 8) | b;
 		buf[pos] = htole32(p);
 	}
 
