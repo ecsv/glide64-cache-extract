@@ -194,7 +194,7 @@ static inline uint64_t le64toh(uint64_t little_endian_64bits)
 #define GR_TEXFMT_GZ                 0x8000U
 
 struct glide64_file {
-	uint8_t *data;
+	void *data;
 	uint64_t checksum;
 	uint32_t width;
 	uint32_t height;

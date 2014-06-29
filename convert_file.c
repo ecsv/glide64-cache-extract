@@ -166,7 +166,7 @@ static int resize_image_dds(struct glide64_file *file)
 {
 	DDS_HEADER *header;
 	size_t header_size = 128;
-	uint8_t *buf;
+	void *buf;
 
 	buf = malloc(file->size + header_size);
 	if (!buf) {
@@ -297,7 +297,7 @@ static int resize_image_dds(struct glide64_file *file)
 		return -EPERM;
 	}
 
-	memcpy(buf + header_size, file->data, file->size);
+	memcpy((uint8_t *)buf + header_size, file->data, file->size);
 	free(file->data);
 	file->data = buf;
 	file->size += header_size;
@@ -310,7 +310,7 @@ static int resize_image_bmp(struct glide64_file *file)
 	struct bmp_header *header;
 	struct bmp_header_v5 *header_v5;
 	uint32_t header_size;
-	uint8_t *buf;
+	void *buf;
 	uint8_t *imagedata;
 	size_t line_size = file->width * 4;
 	uint32_t i;
@@ -391,12 +391,14 @@ static int resize_image_bmp(struct glide64_file *file)
 		header->importantcolors = htole32(0);
 	}
 
-	imagedata = buf + header_size;
+	imagedata = (uint8_t *)buf + header_size;
 	for (i = 0; i < file->height; i++) {
 		uint32_t target_line = i;
 		uint32_t source_line = file->height - i - 1;
 		uint8_t *target_pos = imagedata + target_line * line_size;
-		uint8_t *source_pos = file->data + source_line * line_size;
+		uint8_t *source_pos = (uint8_t *)file->data;
+
+		source_pos += source_line * line_size;
 
 		memcpy(target_pos, source_pos, line_size);
 	}
@@ -770,7 +772,7 @@ static int resize_image_content(struct glide64_file *file)
 int prepare_file(struct glide64_file *file)
 {
 	size_t expected_size;
-	uint8_t *buf;
+	void *buf;
 	uLongf destLen;
 	int ret;
 
