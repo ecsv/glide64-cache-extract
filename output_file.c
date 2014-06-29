@@ -104,7 +104,7 @@ int write_file(struct glide64_file *file)
 	raw_header = (void *)&tarheader;
 	for (i = 0; i < sizeof(tarheader); i++)
 		checksum += raw_header[i];
-	checksum %= 0x40000;
+	checksum %= 0x40000U;
 
 	snprintf(tarheader.chksum, sizeof(tarheader.chksum) - 1, "%06"PRIo32, checksum);
 

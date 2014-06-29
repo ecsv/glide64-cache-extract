@@ -19,19 +19,19 @@
 
 #include "glide64_cache_extract.h"
 
-#define DDSD_CAPS		0x00000001
-#define DDSD_HEIGHT		0x00000002
-#define DDSD_WIDTH		0x00000004
-#define DDSD_PITCH		0x00000008
-#define DDSD_PIXELFORMAT	0x00001000
-#define DDSD_LINEARSIZE		0x00080000
+#define DDSD_CAPS		0x00000001U
+#define DDSD_HEIGHT		0x00000002U
+#define DDSD_WIDTH		0x00000004U
+#define DDSD_PITCH		0x00000008U
+#define DDSD_PIXELFORMAT	0x00001000U
+#define DDSD_LINEARSIZE		0x00080000U
 
-#define DDPF_ALPHAPIXELS	0x00000001
-#define DDPF_FOURCC		0x00000004
-#define DDPF_RGB		0x00000040
-#define DDPF_LUMINANCE		0x00000040
+#define DDPF_ALPHAPIXELS	0x00000001U
+#define DDPF_FOURCC		0x00000004U
+#define DDPF_RGB		0x00000040U
+#define DDPF_LUMINANCE		0x00000040U
 
-#define DDSCAPS_TEXTURE		0x00001000
+#define DDSCAPS_TEXTURE		0x00001000U
 
 typedef struct {
 	uint32_t dwSize;
@@ -140,17 +140,17 @@ static size_t image_content_length(const struct glide64_file *file)
 		size = file->width * file->height * 2;
 		break;
 	case GR_TEXFMT_ARGB_CMP_FXT1:
-		size = (BALIGN(file->width, 7) * BALIGN(file->height, 3)) / 2;
+		size = (BALIGN(file->width, 7U) * BALIGN(file->height, 3U)) / 2;
 		break;
 	case GR_TEXFMT_ARGB_8888:
 		size = file->width * file->height * 4;
 		break;
 	case GR_TEXFMT_ARGB_CMP_DXT1:
-		size = BALIGN(file->width, 3) * BALIGN(file->height, 3);
+		size = BALIGN(file->width, 3U) * BALIGN(file->height, 3U);
 		break;
 	case GR_TEXFMT_ARGB_CMP_DXT3:
 	case GR_TEXFMT_ARGB_CMP_DXT5:
-		size = BALIGN(file->width, 3) * BALIGN(file->height, 3) * 2;
+		size = BALIGN(file->width, 3U) * BALIGN(file->height, 3U) * 2;
 		break;
 	default:
 		size = 0;
@@ -176,7 +176,7 @@ static int resize_image_dds(struct glide64_file *file)
 
 	header = (DDS_HEADER *)buf;
 	memset(header, 0, header_size);
-	header->dwMagic = htole32(0x20534444);
+	header->dwMagic = htole32(0x20534444U);
 	header->dwSize = htole32(124);
 	header->dwFlags = htole32(DDSD_CAPS | DDSD_HEIGHT | DDSD_WIDTH | DDSD_PIXELFORMAT);
 	header->dwHeight = htole32(file->height);
@@ -191,22 +191,22 @@ static int resize_image_dds(struct glide64_file *file)
 		header->dwPitchOrLinearSize = htole32(file->width);
 		header->ddspf.dwFlags = htole32(DDPF_ALPHAPIXELS);
 		header->ddspf.dwRGBBitCount = htole32(8);
-		header->ddspf.dwABitMask = htole32(0xff);
+		header->ddspf.dwABitMask = htole32(0xffU);
 		break;
 	case GR_TEXFMT_INTENSITY_8:
 		header->dwFlags |= DDSD_PITCH;
 		header->dwPitchOrLinearSize = htole32(file->width);
 		header->ddspf.dwFlags = htole32(DDPF_LUMINANCE);
 		header->ddspf.dwRGBBitCount = htole32(8);
-		header->ddspf.dwRBitMask = htole32(0xff);
+		header->ddspf.dwRBitMask = htole32(0xffU);
 		break;
 	case GR_TEXFMT_ALPHA_INTENSITY_44:
 		header->dwFlags |= DDSD_PITCH;
 		header->dwPitchOrLinearSize = htole32(file->width);
 		header->ddspf.dwFlags = htole32(DDPF_ALPHAPIXELS | DDPF_LUMINANCE);
 		header->ddspf.dwRGBBitCount = htole32(8);
-		header->ddspf.dwRBitMask = htole32(0x0f);
-		header->ddspf.dwABitMask = htole32(0xf0);
+		header->ddspf.dwRBitMask = htole32(0x0fU);
+		header->ddspf.dwABitMask = htole32(0xf0U);
 		break;
 	case GR_TEXFMT_P_8:
 		fprintf(stderr, "Unsupported format GR_TEXFMT_P_8\n");
@@ -216,37 +216,37 @@ static int resize_image_dds(struct glide64_file *file)
 		header->dwPitchOrLinearSize = htole32(file->width * 2);
 		header->ddspf.dwFlags = htole32(DDPF_RGB);
 		header->ddspf.dwRGBBitCount = htole32(16);
-		header->ddspf.dwRBitMask = htole32(0xf800);
-		header->ddspf.dwGBitMask = htole32(0x07e0);
-		header->ddspf.dwBBitMask = htole32(0x001f);
+		header->ddspf.dwRBitMask = htole32(0xf800U);
+		header->ddspf.dwGBitMask = htole32(0x07e0U);
+		header->ddspf.dwBBitMask = htole32(0x001fU);
 		break;
 	case GR_TEXFMT_ARGB_1555:
 		header->dwFlags |= DDSD_PITCH;
 		header->dwPitchOrLinearSize = htole32(file->width * 2);
 		header->ddspf.dwFlags = htole32(DDPF_ALPHAPIXELS | DDPF_RGB);
 		header->ddspf.dwRGBBitCount = htole32(16);
-		header->ddspf.dwRBitMask = htole32(0x7c00);
-		header->ddspf.dwGBitMask = htole32(0x03e0);
-		header->ddspf.dwBBitMask = htole32(0x001f);
-		header->ddspf.dwABitMask = htole32(0x8000);
+		header->ddspf.dwRBitMask = htole32(0x7c00U);
+		header->ddspf.dwGBitMask = htole32(0x03e0U);
+		header->ddspf.dwBBitMask = htole32(0x001fU);
+		header->ddspf.dwABitMask = htole32(0x8000U);
 		break;
 	case GR_TEXFMT_ARGB_4444:
 		header->dwFlags |= DDSD_PITCH;
 		header->dwPitchOrLinearSize = htole32(file->width * 2);
 		header->ddspf.dwFlags = htole32(DDPF_ALPHAPIXELS | DDPF_RGB);
 		header->ddspf.dwRGBBitCount = htole32(16);
-		header->ddspf.dwRBitMask = htole32(0x7c00);
-		header->ddspf.dwGBitMask = htole32(0x03e0);
-		header->ddspf.dwBBitMask = htole32(0x001f);
-		header->ddspf.dwABitMask = htole32(0x8000);
+		header->ddspf.dwRBitMask = htole32(0x7c00U);
+		header->ddspf.dwGBitMask = htole32(0x03e0U);
+		header->ddspf.dwBBitMask = htole32(0x001fU);
+		header->ddspf.dwABitMask = htole32(0x8000U);
 		break;
 	case GR_TEXFMT_ALPHA_INTENSITY_88:
 		header->dwFlags |= DDSD_PITCH;
 		header->dwPitchOrLinearSize = htole32(file->width * 2);
 		header->ddspf.dwFlags = htole32(DDPF_ALPHAPIXELS | DDPF_LUMINANCE);
 		header->ddspf.dwRGBBitCount = htole32(16);
-		header->ddspf.dwRBitMask = htole32(0x00ff);
-		header->ddspf.dwABitMask = htole32(0xff00);
+		header->ddspf.dwRBitMask = htole32(0x00ffU);
+		header->ddspf.dwABitMask = htole32(0xff00U);
 		break;
 	case GR_TEXFMT_ARGB_CMP_FXT1:
 		fprintf(stderr, "Unsupported format GR_TEXFMT_ARGB_CMP_FXT1\n");
@@ -257,40 +257,40 @@ static int resize_image_dds(struct glide64_file *file)
 		header->ddspf.dwFlags = htole32(DDPF_ALPHAPIXELS | DDPF_RGB);
 		header->ddspf.dwFourCC = htole32(0);
 		header->ddspf.dwRGBBitCount = htole32(32);
-		header->ddspf.dwRBitMask = htole32(0x00ff0000);
-		header->ddspf.dwGBitMask = htole32(0x0000ff00);
-		header->ddspf.dwBBitMask = htole32(0x000000ff);
-		header->ddspf.dwABitMask = htole32(0xff000000);
+		header->ddspf.dwRBitMask = htole32(0x00ff0000U);
+		header->ddspf.dwGBitMask = htole32(0x0000ff00U);
+		header->ddspf.dwBBitMask = htole32(0x000000ffU);
+		header->ddspf.dwABitMask = htole32(0xff000000U);
 		break;
 	case GR_TEXFMT_ARGB_CMP_DXT1:
 		header->dwFlags |= DDSD_LINEARSIZE;
 		header->dwPitchOrLinearSize = htole32(file->size);
 		header->ddspf.dwFlags = htole32(DDPF_FOURCC);
-		header->ddspf.dwFourCC = htole32(0x31545844);
+		header->ddspf.dwFourCC = htole32(0x31545844U);
 		header->ddspf.dwRGBBitCount = htole32(24);
-		header->ddspf.dwRBitMask = htole32(0x00ff0000);
-		header->ddspf.dwGBitMask = htole32(0x0000ff00);
-		header->ddspf.dwBBitMask = htole32(0x000000ff);
+		header->ddspf.dwRBitMask = htole32(0x00ff0000U);
+		header->ddspf.dwGBitMask = htole32(0x0000ff00U);
+		header->ddspf.dwBBitMask = htole32(0x000000ffU);
 		break;
 	case GR_TEXFMT_ARGB_CMP_DXT3:
 		header->dwFlags |= DDSD_LINEARSIZE;
 		header->dwPitchOrLinearSize = htole32(file->size);
 		header->ddspf.dwFlags = htole32(DDPF_FOURCC);
-		header->ddspf.dwFourCC = htole32(0x33545844);
+		header->ddspf.dwFourCC = htole32(0x33545844U);
 		header->ddspf.dwRGBBitCount = htole32(24);
-		header->ddspf.dwRBitMask = htole32(0x00ff0000);
-		header->ddspf.dwGBitMask = htole32(0x0000ff00);
-		header->ddspf.dwBBitMask = htole32(0x000000ff);
+		header->ddspf.dwRBitMask = htole32(0x00ff0000U);
+		header->ddspf.dwGBitMask = htole32(0x0000ff00U);
+		header->ddspf.dwBBitMask = htole32(0x000000ffU);
 		break;
 	case GR_TEXFMT_ARGB_CMP_DXT5:
 		header->dwFlags |= DDSD_LINEARSIZE;
 		header->dwPitchOrLinearSize = htole32(file->size);
 		header->ddspf.dwFlags = htole32(DDPF_FOURCC);
-		header->ddspf.dwFourCC = htole32(0x35545844);
+		header->ddspf.dwFourCC = htole32(0x35545844U);
 		header->ddspf.dwRGBBitCount = htole32(24);
-		header->ddspf.dwRBitMask = htole32(0x00ff0000);
-		header->ddspf.dwGBitMask = htole32(0x0000ff00);
-		header->ddspf.dwBBitMask = htole32(0x000000ff);
+		header->ddspf.dwRBitMask = htole32(0x00ff0000U);
+		header->ddspf.dwGBitMask = htole32(0x0000ff00U);
+		header->ddspf.dwBBitMask = htole32(0x000000ffU);
 		break;
 	default:
 		fprintf(stderr, "Unsupported format %x\n", file->format);
@@ -334,7 +334,7 @@ static int resize_image_bmp(struct glide64_file *file)
 	if (globals.bitmapv5) {
 		header_v5 = (struct bmp_header_v5 *)buf;
 		memset(header_v5, 0, header_size);
-		header_v5->identifier = htole16(0x4d42);
+		header_v5->identifier = htole16(0x4d42U);
 		header_v5->filesize = htole32(file->size + header_size);
 		header_v5->dataofs = htole32(header_size);
 		header_v5->headersize = htole32(header_size - 14);
@@ -348,20 +348,20 @@ static int resize_image_bmp(struct glide64_file *file)
 		header_v5->vresolution = htole32(2835);
 		header_v5->colors = htole32(0);
 		header_v5->importantcolors = htole32(0);
-		header_v5->redmask = htole32(0x00ff0000);
-		header_v5->greenmask = htole32(0x0000ff00);
-		header_v5->bluemask = htole32(0x000000ff);
-		header_v5->alphamask = htole32(0xff000000);
-		header_v5->colorspace = htole32(0x73524742);
-		header_v5->ciexyz_red_x = htole32(0x00000000);
-		header_v5->ciexyz_red_y = htole32(0x00000000);
-		header_v5->ciexyz_red_z = htole32(0xfc1eb854);
-		header_v5->ciexyz_green_x = htole32(0x00000000);
-		header_v5->ciexyz_green_y = htole32(0x00000000);
-		header_v5->ciexyz_green_z = htole32(0xfc666666);
-		header_v5->ciexyz_blue_x = htole32(0x00000000);
-		header_v5->ciexyz_blue_y = htole32(0x00000000);
-		header_v5->ciexyz_blue_z = htole32(0xff28f5c4);
+		header_v5->redmask = htole32(0x00ff0000U);
+		header_v5->greenmask = htole32(0x0000ff00U);
+		header_v5->bluemask = htole32(0x000000ffU);
+		header_v5->alphamask = htole32(0xff000000U);
+		header_v5->colorspace = htole32(0x73524742U);
+		header_v5->ciexyz_red_x = htole32(0x00000000U);
+		header_v5->ciexyz_red_y = htole32(0x00000000U);
+		header_v5->ciexyz_red_z = htole32(0xfc1eb854U);
+		header_v5->ciexyz_green_x = htole32(0x00000000U);
+		header_v5->ciexyz_green_y = htole32(0x00000000U);
+		header_v5->ciexyz_green_z = htole32(0xfc666666U);
+		header_v5->ciexyz_blue_x = htole32(0x00000000U);
+		header_v5->ciexyz_blue_y = htole32(0x00000000U);
+		header_v5->ciexyz_blue_z = htole32(0xff28f5c4U);
 		header_v5->gamma_red = htole32(0);
 		header_v5->gamma_green = htole32(0);
 		header_v5->intent = htole32(4);
@@ -370,7 +370,7 @@ static int resize_image_bmp(struct glide64_file *file)
 	} else {
 		header = (struct bmp_header *)buf;
 		memset(header, 0, header_size);
-		header->identifier = htole16(0x4d42);
+		header->identifier = htole16(0x4d42U);
 		header->filesize = htole32(file->size + header_size);
 		header->dataofs = htole32(header_size);
 		header->headersize = htole32(header_size - 14);
@@ -485,9 +485,9 @@ static int normalize_image_a4i4(struct glide64_file *file)
 	data = file->data;
 	for (pos = 0; pos < pixels; pos++) {
 		raw = data[pos];
-		i = (raw & 0x0f) << 4;
+		i = (raw & 0x0fU) << 4;
 		i |= i >> 4;
-		a = (raw & 0xf0);
+		a = (raw & 0xf0U);
 		a |= a >> 4;
 		p = (a << 24) | (i << 16) | (i << 8) | i;
 		buf[pos] = htole32(p);
@@ -526,13 +526,13 @@ static int normalize_image_r5g6b5(struct glide64_file *file)
 	data = (uint16_t *)file->data;
 	for (pos = 0; pos < pixels; pos++) {
 		raw = le16toh(data[pos]);
-		r = (raw & 0xf800) >> 8;
+		r = (raw & 0xf800U) >> 8;
 		r |= r >> 5;
-		g = (raw & 0x07e0) >> 3;
+		g = (raw & 0x07e0U) >> 3;
 		g |= g >> 6;
-		b = (raw & 0x001f) << 3;
+		b = (raw & 0x001fU) << 3;
 		b |= b >> 5;
-		p = (0xffu << 24) | (r << 16) | (g << 8) | b;
+		p = (0xffU << 24) | (r << 16) | (g << 8) | b;
 		buf[pos] = htole32(p);
 	}
 
@@ -563,13 +563,13 @@ static int normalize_image_a1r5g5b5(struct glide64_file *file)
 	data = (uint16_t *)file->data;
 	for (pos = 0; pos < pixels; pos++) {
 		raw = le16toh(data[pos]);
-		a = (raw & 0x8000) >> 15;
-		a *= 0xff;
-		r = (raw & 0x7c00) >> 7;
+		a = (raw & 0x8000U) >> 15;
+		a *= 0xffU;
+		r = (raw & 0x7c00U) >> 7;
 		r |= r >> 5;
-		g = (raw & 0x03e0) >> 2;
+		g = (raw & 0x03e0U) >> 2;
 		g |= g >> 5;
-		b = (raw & 0x001f) << 3;
+		b = (raw & 0x001fU) << 3;
 		b |= b >> 5;
 		p = (a << 24) | (r << 16) | (g << 8) | b;
 		buf[pos] = htole32(p);
@@ -602,13 +602,13 @@ static int normalize_image_a4r4g4b4(struct glide64_file *file)
 	data = (uint16_t *)file->data;
 	for (pos = 0; pos < pixels; pos++) {
 		raw = le16toh(data[pos]);
-		a = (raw & 0xf000) >> 4;
+		a = (raw & 0xf000U) >> 4;
 		a |= a >> 4;
-		r = (raw & 0x0f00) >> 4;
+		r = (raw & 0x0f00U) >> 4;
 		r |= r >> 4;
-		g = (raw & 0x00f0);
+		g = (raw & 0x00f0U);
 		g |= g >> 4;
-		b = (raw & 0x000f) << 4;
+		b = (raw & 0x000fU) << 4;
 		b |= b >> 4;
 		p = (a << 24) | (r << 16) | (g << 8) | b;
 		buf[pos] = htole32(p);
@@ -641,8 +641,8 @@ static int normalize_image_a8i8(struct glide64_file *file)
 	data = (uint16_t *)file->data;
 	for (pos = 0; pos < pixels; pos++) {
 		raw = le16toh(data[pos]);
-		a = (raw & 0xff00) >> 8;
-		i = (raw & 0x00ff);
+		a = (raw & 0xff00U) >> 8;
+		i = (raw & 0x00ffU);
 		p = (a << 24) | (i << 16) | (i << 8) | i;
 		buf[pos] = htole32(p);
 	}
