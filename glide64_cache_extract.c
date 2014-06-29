@@ -92,13 +92,7 @@ static int init(int argc, char *argv[])
 	int o;
 	int options_index;
 
-	memset(&globals, 0, sizeof(globals));
-	memset(tarblock, 0, sizeof(tarblock));
-
-	globals.in = stdin;
-	globals.out = stdout;
-
-	struct option long_options[] = {
+	static const struct option long_options[] = {
 		{"verbose",		no_argument,		NULL, 'v'},
 		{"prefix",		required_argument,	NULL, 'p'},
 		{"type",		required_argument,	NULL, 'p'},
@@ -109,6 +103,12 @@ static int init(int argc, char *argv[])
 		{"output",		required_argument,	NULL, 'o'},
 		{NULL,			0,			NULL,  0 },
 	};
+
+	memset(&globals, 0, sizeof(globals));
+	memset(tarblock, 0, sizeof(tarblock));
+
+	globals.in = stdin;
+	globals.out = stdout;
 
 	while ((o = getopt_long(argc, argv, "vp:t:ebhi:o:", long_options, &options_index)) != -1) {
 		switch (o) {
