@@ -6,6 +6,7 @@ OBJ = glide64_cache_extract.o input_config.o input_file.o convert_file.o output_
 
 # flags and options
 CFLAGS += -pedantic -Wall -W -std=gnu99 -MD
+CPPFLAGS += -D_FILE_OFFSET_BITS=64
 
 # disable verbose output
 ifneq ($(findstring $(MAKEFLAGS),s),s)
