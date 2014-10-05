@@ -20,7 +20,7 @@
 #ifndef _GLIDE64_CACHE_EXTRACT_H_
 #define _GLIDE64_CACHE_EXTRACT_H_
 
-#if defined(__linux__)
+#if defined(__linux__) || defined(__CYGWIN__)
 
 #define _BSD_SOURCE
 #include <endian.h>
