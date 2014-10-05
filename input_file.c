@@ -77,6 +77,7 @@ int convert_file(void)
 {
 	struct glide64_file file;
 	int ret;
+	long pos = ftell(globals.in);
 
 	ret = get_buffer_endian(&file.checksum, sizeof(file.checksum), 0);
 	if (ret < 0)
@@ -149,6 +150,9 @@ int convert_file(void)
 	}
 
 	if (globals.verbose >= VERBOSITY_FILE_HEADER) {
+		if (pos >= 0 && globals.in != stdin)
+			fprintf(stderr, "Offset: %#lx\n", pos);
+
 		fprintf(stderr, "File header:\n");
 		fprintf(stderr, "\tchecksum: 0x%016"PRIX64"\n", file.checksum);
 		fprintf(stderr, "\twidth: %"PRIu32"\n", file.width);
