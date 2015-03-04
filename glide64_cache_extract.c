@@ -154,7 +154,7 @@ static int init(int argc, char *argv[])
 			break;
 		case 'o':
 			if (globals.out != stdout)
-				fclose(globals.in);
+				fclose(globals.out);
 
 			globals.out = fopen(optarg, "wb");
 			if (!globals.out) {
