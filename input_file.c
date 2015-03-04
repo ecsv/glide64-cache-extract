@@ -169,6 +169,11 @@ int convert_file(void)
 		fprintf(stderr, "\n");
 	}
 
+	if (file.size <= 0) {
+		fprintf(stderr, "Invalid filesize\n");
+		return ret;
+	}
+
 	file.data = malloc(file.size);
 	if (!file.data) {
 		fprintf(stderr, "Could not allocate memory for file content\n");
