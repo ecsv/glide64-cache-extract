@@ -218,6 +218,7 @@ static int resize_image_dds(struct glide64_file *file)
 		break;
 	case GR_TEXFMT_P_8:
 		fprintf(stderr, "Unsupported format GR_TEXFMT_P_8\n");
+		free(buf);
 		return -EPERM;
 	case GR_TEXFMT_RGB_565:
 		header->dwFlags |= DDSD_PITCH;
@@ -258,6 +259,7 @@ static int resize_image_dds(struct glide64_file *file)
 		break;
 	case GR_TEXFMT_ARGB_CMP_FXT1:
 		fprintf(stderr, "Unsupported format GR_TEXFMT_ARGB_CMP_FXT1\n");
+		free(buf);
 		return -EPERM;
 	case GR_TEXFMT_ARGB_8888:
 		header->dwFlags |= DDSD_PITCH;
