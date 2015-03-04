@@ -302,6 +302,7 @@ static int resize_image_dds(struct glide64_file *file)
 		break;
 	default:
 		fprintf(stderr, "Unsupported format %x\n", file->format);
+		free(buf);
 		return -EPERM;
 	}
 
