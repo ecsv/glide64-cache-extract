@@ -1,5 +1,8 @@
 #!/usr/bin/make -f
+# SPDX-License-Identifier: GPL-3.0-or-later
 # -*- makefile -*-
+#
+# SPDX-FileCopyrightText: 2013, Sven Eckelmann <sven@narfation.org>
 
 BINARY_NAME = glide64_cache_extract
 OBJ = glide64_cache_extract.o input_config.o input_file.o convert_file.o output_file.o
