@@ -40,13 +40,3 @@ check can be done using::
     -q $PATCH
   $ make CC=cgcc
   $ cppcheck --enable=all .
-
-EXTRA SCRIPTS
-=============
-
-contrib/ contains extra scripts which can be used for further analysis.
-
-1. analyze_tex can be used to extract extra information from existing
-   hires texture packs which are not stored inside the glide64 texture cache.
-2. example_db contains some extra information from texture sets which
-   can be used to rename the extracted textures
