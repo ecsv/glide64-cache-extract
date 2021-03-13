@@ -1,5 +1,5 @@
 .. SPDX-License-Identifier: GPL-3.0-or-later
-.. SPDX-FileCopyrightText: 2013, Sven Eckelmann <sven@narfation.org>
+.. SPDX-FileCopyrightText: Sven Eckelmann <sven@narfation.org>
 
 =====================
 glide64_cache_extract
